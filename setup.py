@@ -8,7 +8,7 @@ AUTHOR = "Zenoss Labs"
 LICENSE = ""
 NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.zenoss']
 PACKAGES = ['ZenPacks', 'ZenPacks.zenoss', 'ZenPacks.zenoss.OpenStackSwift']
-INSTALL_REQUIRES = ['ZenPacks.zenoss.LinuxMonitor']
+INSTALL_REQUIRES = []
 COMPAT_ZENOSS_VERS = ">=3.2"
 PREV_ZENPACK_NAME = ""
 # STOP_REPLACEMENTS

@@ -95,6 +95,8 @@ class SwiftRecon(CommandParser):
                     metrics['diskSizeMax'] < diskusage['size']:
                     metrics['diskSizeMax'] = diskusage['size']
 
+                diskSizeSum += diskusage['size']
+
                 usage = 100 * (
                     float(diskusage['used']) / float(diskusage['size']))
 

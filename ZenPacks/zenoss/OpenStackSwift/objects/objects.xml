@@ -296,7 +296,7 @@ True
 True
 </property>
 <property type="string" id="maxval" mode="w" >
-1.5
+2
 </property>
 <property type="string" id="eventClass" mode="w" >
 /Perf/Swift
@@ -336,7 +336,7 @@ True
 True
 </property>
 <property type="string" id="maxval" mode="w" >
-10
+100
 </property>
 <property type="string" id="eventClass" mode="w" >
 /Perf/Swift

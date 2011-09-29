@@ -29,7 +29,7 @@ class ZenPack(ZenPackBase):
     """
 
     packZProperties = [
-        ('zSwiftStoragePort', '6000', 'int'),
+        ('zSwiftObjectServerPort', '6000', 'int'),
         ]
 
     def install(self, app):

@@ -41,18 +41,26 @@ class TestParsers(BaseTestCase):
         cmd.result = FakeCmdResult(0, loadData(output_filename))
 
         metrics = (
+            'asyncPending',
+            'diskSizeAvg',
+            'diskSizeMax',
+            'diskSizeMin',
+            'diskUsageAvg',
+            'diskUsageMax',
+            'diskUsageMin',
             'load1',
-            'load5',
             'load15',
+            'load15PerDisk',
+            'load5',
+            'pidRate',
             'quarantinedAccounts',
             'quarantinedContainers',
             'quarantinedObjects',
             'replicationTime',
+            'runningProcs',
+            'totalDisks',
+            'totalProcs',
             'unmountedDisks',
-            'diskUsageMin',
-            'diskUsageAvg',
-            'diskUsageMax',
-            'asyncPending',
             )
 
         points = []
@@ -74,6 +82,7 @@ class TestParsers(BaseTestCase):
 
         self.assertEquals(len(results.events), 1)
         self.assertEquals(results.events[0]['severity'], cmd.severity)
+
         self.assertEquals(len(results.values), 0)
 
     def testSwiftReconSuccess(self):
@@ -85,7 +94,7 @@ class TestParsers(BaseTestCase):
         self.assertEquals(len(results.events), 1)
         self.assertEquals(results.events[0]['severity'], 0)
 
-        self.assertEquals(len(results.values), 12)
+        self.assertEquals(len(results.values), 20)
 
 
 def test_suite():

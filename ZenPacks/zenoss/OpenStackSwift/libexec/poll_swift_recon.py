@@ -31,7 +31,6 @@ class ReconPoller(object):
     def run(self):
         requests = (
             'async',
-            'ringmd5',
             'replication',
             'load',
             'diskusage',

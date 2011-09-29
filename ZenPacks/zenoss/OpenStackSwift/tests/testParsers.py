@@ -96,6 +96,21 @@ class TestParsers(BaseTestCase):
 
         self.assertEquals(len(results.values), 20)
 
+    def testSwiftReconUnmounted(self):
+        cmd = self._getCmd('poll_swift_recon_unmounted.json')
+        parser = SwiftReconParser()
+        results = ParsedResults()
+        parser.processResults(cmd, results)
+
+        self.assertEquals(len(results.events), 1)
+        self.assertEquals(results.events[0]['severity'], 0)
+
+        self.assertEquals(len(results.values), 20)
+
+        for dp, value in results.values:
+            if dp.id == 'unmountedDisks':
+                self.assertEquals(value, 1)
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite

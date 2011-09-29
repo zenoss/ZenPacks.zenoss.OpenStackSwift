@@ -78,6 +78,7 @@ class SwiftRecon(CommandParser):
                 metrics['totalProcs'] = int(process_parts[1])
 
         if 'diskusage' in data:
+            onlineDrives = 0
             diskSizeSum = 0
             diskUsageSum = 0
 
@@ -87,35 +88,44 @@ class SwiftRecon(CommandParser):
             metrics['diskUsageMax'] = None
 
             for diskusage in data.get('diskusage', []):
-                if metrics['diskSizeMin'] is None or \
-                    metrics['diskSizeMin'] > diskusage['size']:
-                    metrics['diskSizeMin'] = diskusage['size']
+                size = diskusage.get('size', None)
+                if size is not None and size != '':
+                    if metrics['diskSizeMin'] is None or \
+                        metrics['diskSizeMin'] > size:
+                        metrics['diskSizeMin'] = size
 
-                if metrics['diskSizeMax'] is None or \
-                    metrics['diskSizeMax'] < diskusage['size']:
-                    metrics['diskSizeMax'] = diskusage['size']
+                    if metrics['diskSizeMax'] is None or \
+                        metrics['diskSizeMax'] < size:
+                        metrics['diskSizeMax'] = size
 
-                diskSizeSum += diskusage['size']
+                    diskSizeSum += size
 
-                usage = 100 * (
-                    float(diskusage['used']) / float(diskusage['size']))
+                used = diskusage.get('used', None)
+                if used is not None and used != '':
+                    usage = 100 * (float(used) / float(size))
 
-                if metrics['diskUsageMin'] is None or \
-                    metrics['diskUsageMin'] > usage:
-                    metrics['diskUsageMin'] = usage
+                    if metrics['diskUsageMin'] is None or \
+                        metrics['diskUsageMin'] > usage:
+                        metrics['diskUsageMin'] = usage
 
-                if metrics['diskUsageMax'] is None or \
-                    metrics['diskUsageMax'] < usage:
-                    metrics['diskUsageMax'] = usage
+                    if metrics['diskUsageMax'] is None or \
+                        metrics['diskUsageMax'] < usage:
+                        metrics['diskUsageMax'] = usage
 
-                diskUsageSum += usage
+                    onlineDrives += 1
+                    diskUsageSum += usage
 
             if len(data['diskusage']) > 0:
                 metrics['totalDisks'] = len(data['diskusage'])
-                metrics['diskSizeAvg'] = diskSizeSum / metrics['totalDisks']
-                metrics['diskUsageAvg'] = diskUsageSum / metrics['totalDisks']
             else:
                 metrics['totalDisks'] = 0
+
+            if onlineDrives > 0:
+                metrics['diskSizeAvg'] = float(diskSizeSum) / onlineDrives
+                metrics['diskUsageAvg'] = float(diskUsageSum) / onlineDrives
+            else:
+                metrics['diskSizeAvg'] = None
+                metrics['diskUsageAvg'] = None
 
         if 'unmounted' in data:
             metrics['unmountedDisks'] = len(data['unmounted'])

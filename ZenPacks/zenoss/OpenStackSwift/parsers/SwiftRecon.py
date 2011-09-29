@@ -20,105 +20,92 @@ class SwiftRecon(CommandParser):
     eventKey = eventClassKey = 'swift_recon_status'
 
     def processResults(self, cmd, result):
-        # Guard against this parser being used for the wrong command.
         if 'poll_swift_recon' not in cmd.command:
             return
 
-        data = json.loads(cmd.result.output)
-
-        # Error
-        # {
-        #     'events': [
-        #         {
-        #             'url': 'http://127.0.0.123:6000/recon/async',
-        #             'summary': '<urlopen error timed out>',
-        #         },
-        #     ],
-        # }
-
-        # Success
-        # {
-        #     'load': {
-        #         u'5m': 1.4,
-        #         u'1m': 0.69,
-        #         u'processes': 21775,
-        #         u'tasks': u'2/171',
-        #         u'15m': 1.52,
-        #     },
-        #     'ringmd5': {
-        #         u'/etc/swift/object.ring.gz': u'aebd12a3191826d480bd7ffd22b11dcf',
-        #         u'/etc/swift/account.ring.gz': u'fad22f0496120fd851ee24ab99744c8c',
-        #         u'/etc/swift/container.ring.gz': u'349b7614291d6f294d739d8f22609e92',
-        #     },
-        #     'quarantined': {
-        #         u'objects': 0,
-        #         u'accounts': 0,
-        #         u'containers': 0,
-        #     },
-        #     'replication': {
-        #         u'object_replication_time': -1,
-        #     },
-        #     'unmounted': [],
-        #     'diskusage': [
-        #         {
-        #             u'device': u'sdb1',
-        #             u'avail': 10663620608,
-        #             u'mounted': True,
-        #             u'used': 62263296,
-        #             u'size': 10725883904,
-        #         },
-        #     ],
-        #     'async': {
-        #         u'async_pending': 0,
-        #     },
-        #     'events': [],
-        # }
-
-        for event in data.get('events', []):
-            event.update(dict(
+        data = None
+        try:
+            data = json.loads(cmd.result.output)
+        except ValueError:
+            result.events.append(dict(
                 device=cmd.deviceConfig.device,
                 component=cmd.component,
                 eventKey=self.eventKey,
                 severity=cmd.severity,
                 eventClassKey=self.eventClassKey,
+                summary='failed to parse response from swift-recon',
+                message=cmd.result.output,
                 ))
 
-            result.events.append(event)
+        if 'events' in data:
+            for event in data['events']:
+                result.events.append(dict(
+                    device=cmd.deviceConfig.device,
+                    component=cmd.component,
+                    eventKey=self.eventKey,
+                    severity=cmd.severity,
+                    eventClassKey=self.eventClassKey,
+                    **event
+                    ))
+        else:
+            result.events.append(dict(
+                device=cmd.deviceConfig.device,
+                component=cmd.component,
+                eventKey=self.eventKey,
+                severity=0,
+                eventClassKey=self.eventClassKey,
+                summary='swift-recon connectivity restored',
+                ))
 
-        unmounted_disks = len(data['unmounted'])
+        metrics = {}
 
-        diskUsageMin = None
-        diskUsageSum = 0
-        diskUsageAvg = 0
-        diskUsageMax = None
+        if 'load' in data:
+            metrics['load1'] = data['load'].get('1m', None)
+            metrics['load5'] = data['load'].get('5m', None)
+            metrics['load15'] = data['load'].get('15m', None)
 
-        for diskusage in data['diskusage']:
-            usage = 100 * (float(diskusage['used']) / float(diskusage['size']))
-            if diskUsageMin is None or diskUsageMin > usage:
-                diskUsageMin = usage
+        if 'quarantined' in data:
+            metrics['quarantinedAccounts'] = \
+                data['quarantined'].get('accounts', None)
 
-            if diskUsageMax is None or diskUsageMax < usage:
-                diskUsageMax = usage
+            metrics['quarantinedContainers'] = \
+                data['quarantined'].get('containers', None)
 
-            diskUsageSum += usage
+            metrics['quarantinedObjects'] = \
+                data['quarantined'].get('objects', None)
 
-        if len(data['diskUsage']) > 0:
-            diskUsageAvg = diskUsageSum / len(data['diskUsage'])
+        if 'replication' in data:
+            metrics['replicationTime'] = \
+                data['replication'].get('object_replication_time', None)
 
-        metrics = dict(
-            load1=data['load']['1m'],
-            load5=data['load']['5m'],
-            load15=data['load']['15m'],
-            quarantinedAccounts=data['quarantined']['accounts'],
-            quarantinedContainers=data['quarantined']['containers'],
-            quarantinedObjects=data['quarantined']['objects'],
-            replicationTime=data['replication']['object_replication_time'],
-            unmountedDisks=unmounted_disks,
-            diskUsageMin=diskUsageMin,
-            diskUsageAvg=diskUsageAvg,
-            diskUsageMax=diskUsageMax,
-            asyncPending=data['async']['async_pending'],
-            )
+        if 'unmounted' in data:
+            metrics['unmountedDisks'] = len(data['unmounted'])
+
+        if 'diskusage' in data:
+            diskUsageSum = 0
+
+            metrics['diskUsageMin'] = None
+            metrics['diskUsageMax'] = None
+
+            for diskusage in data.get('diskusage', []):
+                usage = 100 * (
+                    float(diskusage['used']) / float(diskusage['size']))
+
+                if metrics['diskUsageMin'] is None or \
+                    metrics['diskUsageMin'] > usage:
+                    metrics['diskUsageMin'] = usage
+
+                if metrics['diskUsageMax'] is None or \
+                    metrics['diskUsageMax'] < usage:
+                    metrics['diskUsageMax'] = usage
+
+                diskUsageSum += usage
+
+            if len(data['diskusage']) > 0:
+                metrics['diskUsageAvg'] = diskUsageSum / len(data['diskusage'])
+
+        if 'async' in data:
+            metrics['asyncPending'] = data['async'].get('async_pending', None)
 
         dp_map = dict([(dp.id, dp) for dp in cmd.points])
 

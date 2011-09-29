@@ -21,10 +21,12 @@ from optparse import OptionParser
 class ReconPoller(object):
     host = None
     port = None
+    timeout = None
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, timeout=30):
         self.host = host
         self.port = port
+        self.timeout = timeout
 
     def run(self):
         requests = (
@@ -37,17 +39,15 @@ class ReconPoller(object):
             'quarantined',
             )
 
-        output = {'events': []}
+        output = {}
 
         for request in requests:
             url = 'http://%s:%s/recon/%s' % (self.host, self.port, request)
             try:
-                body = urllib2.urlopen(url, timeout=30).read()
+                body = urllib2.urlopen(url, timeout=self.timeout).read()
                 output[request] = json.loads(body)
             except (urllib2.HTTPError, urllib2.URLError) as e:
-                output['events'].append(dict(
-                    summary=str(e), url=url))
-
+                output['events'] = [{'summary': str(e), 'url': url}]
                 return output
 
         return output
@@ -67,4 +67,4 @@ if __name__ == '__main__':
         parser.error('No host specified.')
 
     poller = ReconPoller(options.host, options.port)
-    print poller.run()
+    print json.dumps(poller.run())

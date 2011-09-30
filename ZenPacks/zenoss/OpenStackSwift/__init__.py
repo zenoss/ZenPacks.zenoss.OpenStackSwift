@@ -15,10 +15,13 @@
 Custom ZenPack initialization code. All code defined in this module will be
 executed at startup time in all Zope clients.
 """
+import logging
+log = logging.getLogger('zen.OpenStackSwift')
 
 import os
 
 from Products.ZenModel.ZenPack import ZenPack as ZenPackBase
+from Products.ZenModel.ZenossSecurity import ZEN_COMMON
 from Products.ZenUtils.Utils import zenPath
 
 
@@ -35,9 +38,11 @@ class ZenPack(ZenPackBase):
     def install(self, app):
         super(ZenPack, self).install(app)
         self.symlinkPlugin()
+        self.registerPortlet()
 
     def remove(self, app, leaveObjects=False):
         if not leaveObjects:
+            self.unregisterPortlet()
             self.removePluginSymlink()
 
         super(ZenPack, self).remove(app, leaveObjects=leaveObjects)
@@ -48,3 +53,24 @@ class ZenPack(ZenPackBase):
 
     def removePluginSymlink(self):
         os.system('rm -f %s/poll_swift_recon.py' % (zenPath('libexec')))
+
+    def registerPortlet(self):
+        zpm = self.zport.ZenPortletManager
+        portlet_filename = self.path(
+            'browser', 'resources', 'js', 'OpenStackSwiftPortlet.js')
+
+        # register_portlet will prefix the path with $ZENHOME
+        portlet_filename = portlet_filename.replace(zenPath(), '')
+
+        log.info('Registering OpenStack Swift dashboard portlet')
+        zpm.register_portlet(
+            id='OpenStackSwiftPortlet',
+            title='OpenStack Swift',
+            sourcepath=portlet_filename,
+            permission=ZEN_COMMON)
+
+    def unregisterPortlet(self):
+        zpm = self.zport.ZenPortletManager
+
+        log.info('Unregistering OpenStack Swift dashboard portlet')
+        zpm.unregister_portlet('OpenStackSwiftPortlet')

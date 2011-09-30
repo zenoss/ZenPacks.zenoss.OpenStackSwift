@@ -396,7 +396,7 @@ True
 True
 </property>
 <property type="string" id="maxval" mode="w" >
-1
+0
 </property>
 <property type="string" id="eventClass" mode="w" >
 /Status/Swift
@@ -1339,6 +1339,16 @@ swift_recon_status
 </object>
 <!-- ('', 'zport', 'dmd', 'Processes', 'OpenStack') -->
 <object id='/zport/dmd/Processes/OpenStack' module='Products.ZenModel.OSProcessOrganizer' class='OSProcessOrganizer'>
+<property id='zendoc' type='string'>
+Open source software for building private and public clouds.
+
+http://openstack.org/
+</property>
+<property type="text" id="description" mode="w" >
+Open source software for building private and public clouds.
+
+http://openstack.org/
+</property>
 <object id='Swift' module='Products.ZenModel.OSProcessOrganizer' class='OSProcessOrganizer'>
 <property id='zendoc' type='string'>
 Swift is a highly available, distributed, eventually consistent object/blob store. Organizations can use Swift to store lots of data efficiently, safely, and cheaply.

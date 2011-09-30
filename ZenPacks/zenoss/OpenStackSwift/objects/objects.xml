@@ -876,7 +876,7 @@ AVERAGE
 1
 </property>
 <property type="string" id="color" mode="w" >
-DD0033
+000000
 </property>
 <property select_variable="lineTypes" type="selection" id="lineType" mode="w" >
 LINE
@@ -1336,5 +1336,302 @@ swift_recon_status
 </property>
 </object>
 </tomanycont>
+</object>
+<!-- ('', 'zport', 'dmd', 'Processes', 'OpenStack') -->
+<object id='/zport/dmd/Processes/OpenStack' module='Products.ZenModel.OSProcessOrganizer' class='OSProcessOrganizer'>
+<object id='Swift' module='Products.ZenModel.OSProcessOrganizer' class='OSProcessOrganizer'>
+<property id='zendoc' type='string'>
+Swift is a highly available, distributed, eventually consistent object/blob store. Organizations can use Swift to store lots of data efficiently, safely, and cheaply.
+
+http://swift.openstack.org/
+</property>
+<property type="text" id="description" mode="w" >
+Swift is a highly available, distributed, eventually consistent object/blob store. Organizations can use Swift to store lots of data efficiently, safely, and cheaply.
+
+http://swift.openstack.org/
+</property>
+<tomanycont id='osProcessClasses'>
+<object id='swift-account-auditor' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Account auditor.
+</property>
+<property type="string" id="name" mode="w" >
+swift-account-auditor
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-account-auditor
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Account auditor.
+</property>
+<property type="int" id="sequence" mode="w" >
+8
+</property>
+</object>
+<object id='swift-account-reaper' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Account reaper.
+</property>
+<property type="string" id="name" mode="w" >
+swift-account-reaper
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-account-reaper
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Account reaper.
+</property>
+<property type="int" id="sequence" mode="w" >
+9
+</property>
+</object>
+<object id='swift-account-replicator' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Account replicator.
+</property>
+<property type="string" id="name" mode="w" >
+swift-account-replicator
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-account-replicator
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Account replicator.
+</property>
+<property type="int" id="sequence" mode="w" >
+10
+</property>
+</object>
+<object id='swift-account-server' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+WSGI controller for the account server.
+</property>
+<property type="string" id="name" mode="w" >
+swift-account-server
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-account-server
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+WSGI controller for the account server.
+</property>
+<property type="int" id="sequence" mode="w" >
+11
+</property>
+</object>
+<object id='swift-container-auditor' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Container auditor.
+</property>
+<property type="string" id="name" mode="w" >
+swift-container-auditor
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-container-auditor
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Container auditor.
+</property>
+<property type="int" id="sequence" mode="w" >
+12
+</property>
+</object>
+<object id='swift-container-replicator' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Container replicator.
+</property>
+<property type="string" id="name" mode="w" >
+swift-container-replicator
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-container-replicator
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Container replicator.
+</property>
+<property type="int" id="sequence" mode="w" >
+13
+</property>
+</object>
+<object id='swift-container-server' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+WSGI Controller for the container server.
+</property>
+<property type="string" id="name" mode="w" >
+swift-container-server
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-container-server
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+WSGI Controller for the container server.
+</property>
+<property type="int" id="sequence" mode="w" >
+14
+</property>
+</object>
+<object id='swift-container-sync' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Container synchronizer.
+</property>
+<property type="string" id="name" mode="w" >
+swift-container-sync
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-container-sync
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Container synchronizer.
+</property>
+<property type="int" id="sequence" mode="w" >
+15
+</property>
+</object>
+<object id='swift-container-updater' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Container updater.
+</property>
+<property type="string" id="name" mode="w" >
+swift-container-updater
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-container-updater
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Container updater.
+</property>
+<property type="int" id="sequence" mode="w" >
+16
+</property>
+</object>
+<object id='swift-object-auditor' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Object auditor.
+</property>
+<property type="string" id="name" mode="w" >
+swift-object-auditor
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-object-auditor
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Object auditor.
+</property>
+<property type="int" id="sequence" mode="w" >
+17
+</property>
+</object>
+<object id='swift-object-replicator' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Object replicator.
+</property>
+<property type="string" id="name" mode="w" >
+swift-object-replicator
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-object-replicator
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Object replicator.
+</property>
+<property type="int" id="sequence" mode="w" >
+18
+</property>
+</object>
+<object id='swift-object-server' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Object Server for Swift
+</property>
+<property type="string" id="name" mode="w" >
+swift-object-server
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-object-server
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Object Server for Swift
+</property>
+<property type="int" id="sequence" mode="w" >
+19
+</property>
+</object>
+<object id='swift-object-updater' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+Object updater.
+</property>
+<property type="string" id="name" mode="w" >
+swift-object-updater
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-object-updater
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+Object updater.
+</property>
+<property type="int" id="sequence" mode="w" >
+20
+</property>
+</object>
+<object id='swift-proxy-server' module='Products.ZenModel.OSProcessClass' class='OSProcessClass'>
+<property id='zendoc' type='string'>
+WSGI controller for container, account and object requests.
+</property>
+<property type="string" id="name" mode="w" >
+swift-proxy-server
+</property>
+<property type="string" id="regex" mode="w" >
+bin/swift-proxy-server
+</property>
+<property type="boolean" id="ignoreParameters" mode="w" >
+False
+</property>
+<property type="text" id="description" mode="w" >
+WSGI controller for container, account and object requests.
+</property>
+<property type="int" id="sequence" mode="w" >
+21
+</property>
+</object>
+</tomanycont>
+</object>
 </object>
 </objects>

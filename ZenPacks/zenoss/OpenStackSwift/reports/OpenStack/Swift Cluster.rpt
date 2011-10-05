@@ -7,23 +7,88 @@
 <tal:block metal:use-macro="here/templates/macros/page1">
 <tal:block metal:fill-slot="contentPane">
 
-<table>
+<style>
+    th { text-align:center; }
+    th.title { text-align:right; font-size:large; }
+    .head1 th { font-size:large; vertical-align:top; background-color:#ADADAD; }
+    .head2 th { font-size:x-small; background-color:#ADADAD; }
+    .cluster th { font-size:large; }
+    .server_type th { font-size:small; border-top:1px solid black; }
+    .server th { font-size:x-small; }
+    td.pill { margin:0px; padding:0px; border:1px solid black; }
+    .swiftreport table tr th td { width:100%; height:100%; }
+</style>
+
+<table class="swiftreport" style="width:100%; height:100%;" >
     <thead>
-    <tr>
-        <th></th>
-        <th>Status</th>
-        <th>Performance</th>
-        <th>Capacity</th>
-    </tr>
+        <tr class="head1">
+            <th></th>
+            <th colspan="4">Availability</th>
+            <th colspan="4">Performance</th>
+            <!-- <th rowspan="2">Capacity</th> -->
+        </tr>
+        <tr class="head2">
+            <th></th>
+            <th>Swift</th>
+            <th>Servers</th>
+            <th>Processes</th>
+            <th>Ports</th>
+            <th>Swift</th>
+            <th>Servers</th>
+            <th>Processes</th>
+            <th>Ports</th>
+        </tr>
     </thead>
 
     <tbody>
-    <tr tal:repeat="cluster clusters">
-        <th tal:content="cluster/title"/>
-        <td><table tal:replace="structure cluster/status"/></td>
-        <td><table tal:replace="structure cluster/performance"/></td>
-        <td><table tal:replace="structure cluster/capacity"/></td>
-    </tr>
+    <tal:block tal:repeat="cluster clusters">
+        <tr tal:define="odd repeat/cluster/odd" tal:attributes="class python:'cluster ' + test(odd,'odd','even')">
+            <th class="title" tal:content="cluster/title"/>
+            <td class="pill"><table tal:replace="structure cluster/swiftStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure cluster/serverStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure cluster/portStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure cluster/processStatusPill"/></td>
+
+            <td class="pill"><table tal:replace="structure cluster/swiftPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure cluster/serverPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure cluster/portPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure cluster/processPerfPill"/></td>
+
+            <!-- <td>Capacity metrics will go here.</td> -->
+        </tr>
+    <tal:block tal:repeat="server_type cluster/server_types">
+        <tr tal:define="odd repeat/server_type/odd" tal:attributes="class python:'server_type ' + test(odd,'odd','even')">
+            <th class="title" tal:content="server_type/title"/>
+            <td class="pill"><table tal:replace="structure server_type/swiftStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure server_type/serverStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure server_type/portStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure server_type/processStatusPill"/></td>
+
+            <td class="pill"><table tal:replace="structure server_type/swiftPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure server_type/serverPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure server_type/portPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure server_type/processPerfPill"/></td>
+
+            <!-- <td>Capacity metrics will go here.</td> -->
+        </tr>
+    <tal:block tal:repeat="server server_type/servers">
+        <tr tal:define="odd repeat/server/odd" tal:attributes="class python:'server ' + test(odd,'odd','even')">
+            <th class="title" tal:content="server/title"/>
+            <td class="pill"><table tal:replace="structure server/swiftStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure server/serverStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure server/portStatusPill"/></td>
+            <td class="pill"><table tal:replace="structure server/processStatusPill"/></td>
+
+            <td class="pill"><table tal:replace="structure server/swiftPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure server/serverPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure server/portPerfPill"/></td>
+            <td class="pill"><table tal:replace="structure server/processPerfPill"/></td>
+
+            <!-- <td>Capacity metrics will go here.</td> -->
+        </tr>
+    </tal:block>
+    </tal:block>
+    </tal:block>
     </tbody>
 </table>
 

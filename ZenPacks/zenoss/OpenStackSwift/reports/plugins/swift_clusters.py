@@ -17,43 +17,108 @@ Plugin that feeds data to the Swift Cluster report.
 
 from itertools import imap
 
-from Products.ZenEvents.browser.EventPillsAndSummaries import getEventPillME
+from Products.ZenEvents.browser.EventPillsAndSummaries import getEventsURL
+from Products.ZenModel.Device import Device
+from Products.ZenModel.DeviceOrganizer import DeviceOrganizer
+
+
+def getWorstPillFromSummary(summary, url):
+    pillTemplate = """
+        <table class="eventrainbow eventrainbow_cols_1">
+            <tr>
+                <td class="severity-icon-small %(severity)s %(noevents)s">
+                    <a href="%(url)s" target="_top">%(count)s</a>
+                </td>
+            </tr>
+        </table>
+        """
+
+    severity_strings = "critical error warning info debug".split()
+
+    i = 0
+    for css, acked, unacked in summary:
+        total = acked + unacked
+        if total < 1:
+            i += 1
+            continue
+
+        return pillTemplate % dict(
+            url=url,
+            severity=severity_strings[i],
+            noevents='',
+            count=total,
+        )
+
+    return pillTemplate % dict(
+        url=url,
+        severity='clear',
+        noevents='no-events',
+        count=0,
+    )
 
 
 class AbstractBase(object):
     obj = None
     title = None
+    device_ids = None
 
     def __init__(self, obj):
         self.obj = obj
         self.title = obj.titleOrId()
 
-    @property
-    def status(self):
-        return getEventPillME(
-            self.obj.ZenEventManager, self.obj,
-            number=3,
-            minSeverity=0,
-            showGreen=True,
-            prodState=1000)
+        if isinstance(self.obj, Device):
+            self.device_ids = [self.obj.id]
+        elif isinstance(self.obj, DeviceOrganizer):
+            self.device_ids = [x.id for x in self.obj.getSubDevicesGen()]
+
+    def _getWhere(self, eventClass):
+        return "device IN ('%s') AND eventClass LIKE '%s%%'" % (
+            "','".join(self.device_ids), eventClass)
+
+    def _getPill(self, eventClass):
+        summary = self.obj.ZenEventManager.getEventSummary(
+            self._getWhere(eventClass),
+            severity=1,
+            state=1,
+            prodState=300)
+
+        return getWorstPillFromSummary(summary, getEventsURL(self.obj))
 
     @property
-    def performance(self):
-        return getEventPillME(
-            self.obj.ZenEventManager, self.obj,
-            number=3,
-            minSeverity=0,
-            showGreen=True,
-            prodState=1000)
+    def swiftStatusPill(self):
+        return self._getPill('/Status/Swift')
+
+    @property
+    def serverStatusPill(self):
+        return self._getPill('/Status/Ping')
+
+    @property
+    def portStatusPill(self):
+        return self._getPill('/Status/IpService')
+
+    @property
+    def processStatusPill(self):
+        return self._getPill('/Status/OSProcess')
+
+    @property
+    def swiftPerfPill(self):
+        return self._getPill('/Perf/Swift')
+
+    @property
+    def serverPerfPill(self):
+        return self._getPill('/Perf')
+
+    @property
+    def portPerfPill(self):
+        return self._getPill('/Perf/IpService')
+
+    @property
+    def processPerfPill(self):
+        return self._getPill('/Perf/OSProcess')
 
     @property
     def capacity(self):
-        return getEventPillME(
-            self.obj.ZenEventManager, self.obj,
-            number=3,
-            minSeverity=0,
-            showGreen=True,
-            prodState=1000)
+        return ""
 
 
 class Cluster(AbstractBase):
@@ -65,16 +130,28 @@ class Cluster(AbstractBase):
 
 class ServerType(AbstractBase):
     @property
-    def members(self):
+    def servers(self):
         for device in self.obj.getSubDevicesGen():
-            member = None
+            if self.title == 'Proxy Servers':
+                yield ProxyServer(device)
+            elif self.title == 'Object Servers':
+                yield ObjectServer(device)
+            elif self.title == 'Container Servers':
+                yield ContainerServer(device)
+            elif self.title == 'Account Servers':
+                yield AccountServer(device)
 
-            if self.title == 'Object Servers':
-                member = ObjectServer(device)
 
-            # TODO: Proxy, Container and Account Servers.
+class ProxyServer(AbstractBase):
+    pass
 
-            yield member
+
+class AccountServer(AbstractBase):
+    pass
+
+
+class ContainerServer(AbstractBase):
+    pass
 
 
 class ObjectServer(AbstractBase):

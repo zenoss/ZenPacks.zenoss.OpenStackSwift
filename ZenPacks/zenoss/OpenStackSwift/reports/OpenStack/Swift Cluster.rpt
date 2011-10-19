@@ -13,7 +13,7 @@
     .head1 th { font-size:large; vertical-align:top; background-color:#ADADAD; }
     .head2 th { font-size:x-small; background-color:#ADADAD; }
     .cluster th { font-size:large; }
-    .server_type th { font-size:small; border-top:1px solid black; }
+    .server_type th { font-size:x-small; border-top:1px solid black; }
     .server th { font-size:x-small; }
     td.pill { margin:0px; padding:0px; border:1px solid black; }
     .swiftreport table tr th td { width:100%; height:100%; }
@@ -31,12 +31,12 @@
             <th></th>
             <th>Swift</th>
             <th>Servers</th>
-            <th>Processes</th>
             <th>Ports</th>
+            <th>Processes</th>
             <th>Swift</th>
             <th>Servers</th>
-            <th>Processes</th>
             <th>Ports</th>
+            <th>Processes</th>
         </tr>
     </thead>
 
@@ -71,6 +71,7 @@
 
             <!-- <td>Capacity metrics will go here.</td> -->
         </tr>
+    <!--
     <tal:block tal:repeat="server server_type/servers">
         <tr tal:define="odd repeat/server/odd" tal:attributes="class python:'server ' + test(odd,'odd','even')">
             <th class="title" tal:content="server/title"/>
@@ -84,9 +85,10 @@
             <td class="pill"><table tal:replace="structure server/portPerfPill"/></td>
             <td class="pill"><table tal:replace="structure server/processPerfPill"/></td>
 
-            <!-- <td>Capacity metrics will go here.</td> -->
+            <td>Capacity metrics will go here.</td>
         </tr>
     </tal:block>
+    -->
     </tal:block>
     </tal:block>
     </tbody>

@@ -29,6 +29,7 @@ Depending on what version of Zenoss you're running you will need a different
 package. Download the appropriate package for your Zenoss version from the list
 below.
 
+ * Zenoss 4.1: [Latest Package for Python 2.7][]
  * Zenoss 3.0 - 4.0: [Latest Package for Python 2.6][]
 
 Then copy it to your Zenoss server and run the following commands as the zenoss
@@ -197,4 +198,5 @@ useful.
 
 [Zenoss]: <http://www.zenoss.com/>
 [Swift project site]: <http://swift.openstack.org/>
+[Latest Package for Python 2.7]: <https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.7.egg>
 [Latest Package for Python 2.6]: <https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.6.egg>

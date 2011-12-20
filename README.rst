@@ -1,14 +1,21 @@
-# ZenPacks.zenoss.OpenStackSwift
-This project is a [Zenoss][] extension (ZenPack) that allows for monitoring of
+==============================
+ZenPacks.zenoss.OpenStackSwift
+==============================
+
+.. contents::
+   :depth: 3
+
+This project is a Zenoss_ extension (ZenPack) that allows for monitoring of
 Swift. Swift is the project name for the Object Store in OpenStack.
 
-From the [Swift project site][]:
+From the `Swift project site`_:
 
-> Swift is a highly available, distributed, eventually consistent object/blob
-> store. Organizations can use Swift to store lots of data efficiently,
-> safely, and cheaply.
+    Swift is a highly available, distributed, eventually consistent object/blob
+    store. Organizations can use Swift to store lots of data efficiently,
+    safely, and cheaply.
 
-## Requirements & Dependencies
+Requirements & Dependencies
+---------------------------
 This ZenPack is known to be compatible with Zenoss versions 3.2 through 4.0.
 
 All of the monitoring currently performance is done through the optional
@@ -17,64 +24,73 @@ servers. Before using this ZenPack you must install and configure swift-recon
 on your Swift object servers.
 
 You can find more information about swift-recon at
-<https://github.com/pandemicsyn/swift-recon>.
+https://github.com/pandemicsyn/swift-recon .
 
-## Installation
+Installation
+------------
 You must first have, or install, Zenoss 3.2.0 or later. Core and Enterprise
 versions are supported. You can download the free Core version of Zenoss from
-<http://community.zenoss.org/community/download>.
+http://community.zenoss.org/community/download .
 
-### Normal Installation (packaged egg)
+Normal Installation (packaged egg)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Depending on what version of Zenoss you're running you will need a different
 package. Download the appropriate package for your Zenoss version from the list
 below.
 
- * Zenoss 4.1: [Latest Package for Python 2.7][]
- * Zenoss 3.0 - 4.0: [Latest Package for Python 2.6][]
+* Zenoss 4.1: `Latest Package for Python 2.7`_
+* Zenoss 3.0 - 4.0: `Latest Package for Python 2.6`_
 
 Then copy it to your Zenoss server and run the following commands as the zenoss
-user.
+user::
 
     zenpack --install <package.egg>
     zenoss restart
 
-### Developer Installation (link mode)
+Developer Installation (link mode)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you wish to further develop and possibly contribute back you should clone
 the git repository, then install the ZenPack in developer mode using the
-following commands.
+following commands::
 
     git clone git://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift.git
     zenpack --link --install ZenPacks.zenoss.OpenStackSwift
     zenoss restart
 
-## Usage
+Usage
+-----
 Installing the ZenPack will add the following objects to your Zenoss system.
 
- * Configuration Properties
+* Configuration Properties
+
   * zSwiftObjectServerPort: Listening port of swift-object-server. Defaults to
     6000.
 
- * Monitoring Templates
+* Monitoring Templates
+
   * SwiftObjectServer in /Devices
 
- * Process Classes
-  * OpenStack/Swift
-   * swift-account-auditor
-   * swift-account-reaper
-   * swift-account-replicator
-   * swift-account-server
-   * swift-container-auditor
-   * swift-container-replicator
-   * swift-container-server
-   * swift-container-sync
-   * swift-container-updater
-   * swift-object-auditor
-   * swift-object-replicator
-   * swift-object-server
-   * swift-object-updater
-   * swift-proxy-server
+* Process Classes
 
- * Event Classes
+  * OpenStack/Swift
+
+    * swift-account-auditor
+    * swift-account-reaper
+    * swift-account-replicator
+    * swift-account-server
+    * swift-container-auditor
+    * swift-container-replicator
+    * swift-container-server
+    * swift-container-sync
+    * swift-container-updater
+    * swift-object-auditor
+    * swift-object-replicator
+    * swift-object-server
+    * swift-object-updater
+    * swift-proxy-server
+
+* Event Classes
+
   * /Status/Swift
   * /Perf/Swift
 
@@ -90,11 +106,13 @@ class and bind the template to that device class. Typically this will be under
 either /Server/Linux or /Server/SSH/Linux so you get normal operating system
 monitoring in addition to the Swift-specific monitoring.
 
-### Swift Metrics
+Swift Metrics
+~~~~~~~~~~~~~
 Assuming you have swift-recon and Zenoss setup properly you can expect to see
 the following extra graphs on your Swift object servers.
 
- * Swift Object Server - Async Pending
+* Swift Object Server - Async Pending
+
   * Trend of asynchronous pending tasks. When a Swift proxy server updates an
     object it attempts to synchronously update the object's container with the
     new object information. There is a three second timeout on this task and if
@@ -105,7 +123,8 @@ the following extra graphs on your Swift object servers.
     will raise a warning severity event in the /Perf/Swift event class when it
     is breached.
 
- * Swift Object Server - Disks
+* Swift Object Server - Disks
+
   * Trend of total and unmounted disks on the storage node. Swift's mechanism
     for detecting failing or failed drives and taking them offline is to
     unmount them. By proactively monitoring for unmounted disks and replacing
@@ -113,10 +132,12 @@ the following extra graphs on your Swift object servers.
     is set on unmounted disks and will raise a warning severity event in the
     /Status/Swift event class.
 
- * Swift Object Server - Quarantine
+* Swift Object Server - Quarantine
+
   * Trend of accounts, containers and objects that have been quarantined. Swift
     has an auditor process that will find corrupt items and move them into a
     quarantine area so good objects will be replicated back into their place.
+    
     Sudden increases in quarantined items can indicate hardware problems on
     storage nodes. Additionally quarantine is not automatically pruned and can
     result in some storage nodes filling up their disk at a faster rate than
@@ -124,14 +145,16 @@ the following extra graphs on your Swift object servers.
     set individually on quarantined accounts, containers and objects. A warning
     event will be raised in the /Status/Swift event class if it is breached.
 
- * Swift Object Server - Replication Time
+* Swift Object Server - Replication Time
+
   * Trend of replication time. Swift has a replicator process that cycles
     continually. If a single replication cycle takes more than 30 minutes it
     can reduce the resiliency of the cluster. By default a maximum threshold of
     30 minutes is set on replication time and will raise a warning severity
     event in the /Perf/Swift event class when breached.
 
- * Swift Object Server - Load Averages
+* Swift Object Server - Load Averages
+
   * Trend of 1, 5 and 15 minute operating system load average. Additionally the
     15 minute load average divided by total disks is calculated. A perfectly
     efficient storage node will run at a load average of 1.0 per disk. By
@@ -139,13 +162,15 @@ the following extra graphs on your Swift object servers.
     by total disks and will raise a warning severity event in the /Perf/Swift
     event class when breached.
 
- * Swift Object Server - Process Churn
+* Swift Object Server - Process Churn
+
   * Trend of processes created per second. High process churn can indicate a
     broken process being unnecessarily restarted. By default a maximum treshold
     of 100 processes per second is set and will raise a warning severity event
     in the /Perf/Swift event class when breached.
 
- * Swift Object Server - Disk Usages
+* Swift Object Server - Disk Usages
+
   * Trend of maximum, average and minimum disk usage for all disks in the
     storage node. These are the primary storage capacity metrics within a
     cluster. Depending on the size of each individual disk, weights and the
@@ -154,17 +179,20 @@ the following extra graphs on your Swift object servers.
     the maximum usage metric. It will raise a warning severity in the
     /Status/Swift event class when breached.
 
- * Swift Object Server - Disk Sizes
+* Swift Object Server - Disk Sizes
+
   * Trend of maximum, average and minimum disk sizes for all disks in the
     storage node. Ideally all disks in a storage node will be the same size
     unless weights are closely managed. No default thresholds are set on these
     metrics.
 
- * Swift Object Server - Processes
+* Swift Object Server - Processes
+
   * Trend of total and running processes. No default thresholds are set on
     these metrics.
 
-### Process Monitoring
+Process Monitoring
+~~~~~~~~~~~~~~~~~~
 All Swift processes will be discovered and monitored based on the process
 classes listed above. If one of the processes is found to not be running on a
 node where it should be, an error severity event will be raised in the
@@ -173,30 +201,44 @@ node where it should be, an error severity event will be raised in the
 Each of the individual Swift process will also be monitored for its CPU and
 memory utilization.
 
-## What's Next
+What's Next
+-----------
 While this ZenPack currently has wide coverage of metrics that are important to
 the successful operation of a Swift cluster, there are more opportunities. The
 following is a list of metrics that are not currently monitored, but would be
 useful.
 
- * Dispersion Report Results
- * Ring consistency between all object, container and account servers.
+* Dispersion Report Results
+* Ring consistency between all object, container and account servers.
 
-## Screenshots
-![Aggregate Graphs 1](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate1.png)
-![Aggregate Graphs 2](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate2.png)
-![Total & Unmounted Disks](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disks.png)
-![Async Pending Tasks](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/async_pending.png)
-![Disk Usages](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_usages.png)
-![Disk Sizes](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_sizes.png)
-![Load Averages](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/load_averages.png)
-![Process Churn](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/process_churn.png)
-![Total & Running Processes](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/processes.png)
-![Quarantined Items](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/quarantine.png)
-![Process Monitoring](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/osprocesses.png)
+Screenshots
+-----------
+|Aggregate Graphs 1|
+|Aggregate Graphs 2|
+|Total & Unmounted Disks|
+|Async Pending Tasks|
+|Disk Usages|
+|Disk Sizes|
+|Load Averages|
+|Process Churn|
+|Total & Running Processes|
+|Quarantined Items|
+|Process Monitoring|
 
 
-[Zenoss]: <http://www.zenoss.com/>
-[Swift project site]: <http://swift.openstack.org/>
-[Latest Package for Python 2.7]: <https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.7.egg>
-[Latest Package for Python 2.6]: <https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.6.egg>
+.. _Zenoss: http://www.zenoss.com/
+.. _Swift project site: http://swift.openstack.org/
+.. _Latest Package for Python 2.7: https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.7.egg
+.. _Latest Package for Python 2.6: https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.6.egg
+
+.. |Aggregate Graphs 1| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate1.png
+.. |Aggregate Graphs 2| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate2.png
+.. |Total & Unmounted Disks| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disks.png
+.. |Async Pending Tasks| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/async_pending.png
+.. |Disk Usages| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_usages.png
+.. |Disk Sizes| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_sizes.png
+.. |Load Averages| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/load_averages.png
+.. |Process Churn| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/process_churn.png
+.. |Total & Running Processes| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/processes.png
+.. |Quarantined Items| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/quarantine.png
+.. |Process Monitoring| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/osprocesses.png

@@ -57,32 +57,32 @@ Usage
 Installing the ZenPack will add the following objects to your Zenoss system.
 
 * Configuration Properties
- - zSwiftObjectServerPort: Listening port of swift-object-server. Defaults to
-    6000.
+   * zSwiftObjectServerPort: Listening port of swift-object-server. Defaults to
+     6000.
 
 * Monitoring Templates
- - SwiftObjectServer in /Devices
+   * SwiftObjectServer in /Devices
 
 * Process Classes
- - OpenStack/Swift
-  + swift-account-auditor
-  + swift-account-reaper
-  + swift-account-replicator
-  + swift-account-server
-  + swift-container-auditor
-  + swift-container-replicator
-  + swift-container-server
-  + swift-container-sync
-  + swift-container-updater
-  + swift-object-auditor
-  + swift-object-replicator
-  + swift-object-server
-  + swift-object-updater
-  + swift-proxy-server
+   * OpenStack/Swift
+      * swift-account-auditor
+      * swift-account-reaper
+      * swift-account-replicator
+      * swift-account-server
+      * swift-container-auditor
+      * swift-container-replicator
+      * swift-container-server
+      * swift-container-sync
+      * swift-container-updater
+      * swift-object-auditor
+      * swift-object-replicator
+      * swift-object-server
+      * swift-object-updater
+      * swift-proxy-server
 
 * Event Classes
- - /Status/Swift
- - /Perf/Swift
+   * /Status/Swift
+   * /Perf/Swift
 
 The zSwiftObjectServerPort property is used by the SwiftObjectServer monitoring
 template to control what port it will attempt to find the recon API on.
@@ -193,20 +193,32 @@ useful.
 
 Screenshots
 -----------
-![Aggregate Graphs 1](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate1.png)
-![Aggregate Graphs 2](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate2.png)
-![Total & Unmounted Disks](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disks.png)
-![Async Pending Tasks](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/async_pending.png)
-![Disk Usages](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_usages.png)
-![Disk Sizes](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_sizes.png)
-![Load Averages](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/load_averages.png)
-![Process Churn](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/process_churn.png)
-![Total & Running Processes](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/processes.png)
-![Quarantined Items](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/quarantine.png)
-![Process Monitoring](https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/osprocesses.png)
+|Aggregate Graphs 1|
+|Aggregate Graphs 2|
+|Total & Unmounted Disks|
+|Async Pending Tasks|
+|Disk Usages|
+|Disk Sizes|
+|Load Averages|
+|Process Churn|
+|Total & Running Processes|
+|Quarantined Items|
+|Process Monitoring|
 
 
 [Zenoss]: <http://www.zenoss.com/>
 [Swift project site]: <http://swift.openstack.org/>
 [Latest Package for Python 2.7]: <https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.7.egg>
 [Latest Package for Python 2.6]: <https://github.com/downloads/zenoss/ZenPacks.zenoss.OpenStackSwift/ZenPacks.zenoss.OpenStackSwift-0.7.0-py2.6.egg>
+
+.. |Aggregate Graphs 1| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate1.png
+.. |Aggregate Graphs 2| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/aggregate2.png
+.. |Total & Unmounted Disks| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disks.png
+.. |Async Pending Tasks| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/async_pending.png
+.. |Disk Usages| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_usages.png
+.. |Disk Sizes| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/disk_sizes.png
+.. |Load Averages| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/load_averages.png
+.. |Process Churn| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/process_churn.png
+.. |Total & Running Processes| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/processes.png
+.. |Quarantined Items| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/quarantine.png
+.. |Process Monitoring| image:: https://github.com/zenoss/ZenPacks.zenoss.OpenStackSwift/raw/master/docs/osprocesses.png

@@ -12,7 +12,7 @@
 ###########################################################################
 
 from Products.ZenRRD.CommandParser import ParsedResults
-from Products.ZenRRD.zencommand import Cmd, DataPointConfig, DeviceConfig
+from Products.ZenRRD.zencommand import Cmd, DataPointConfig
 from Products.ZenTestCase.BaseTestCase import BaseTestCase
 
 from ..parsers.SwiftRecon import SwiftRecon as SwiftReconParser
@@ -32,8 +32,15 @@ class FakeCmdResult(object):
 class TestParsers(BaseTestCase):
     def _getCmd(self, output_filename):
         cmd = Cmd()
-        cmd.deviceConfig = DeviceConfig()
-        cmd.deviceConfig.device = 'swift1'
+
+        # DeviceConfig no longer exists as of Zenoss 4.
+        try:
+            from Products.ZenRRD.zencommand import DeviceConfig
+            cmd.deviceConfig = DeviceConfig()
+            cmd.deviceConfig.device = 'swift1'
+        except ImportError:
+            pass
+
         cmd.component = 'swift'
         cmd.command = 'poll_swift_recon -H 127.0.0.1'
         cmd.eventClass = '/Status/Swift'

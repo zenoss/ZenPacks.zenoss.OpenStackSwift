@@ -18,8 +18,12 @@ executed at startup time in all Zope clients.
 
 import os
 
+import Globals
+
 from Products.ZenModel.ZenPack import ZenPack as ZenPackBase
-from Products.ZenUtils.Utils import zenPath
+from Products.ZenUtils.Utils import zenPath, unused
+
+unused(Globals)
 
 
 class ZenPack(ZenPackBase):

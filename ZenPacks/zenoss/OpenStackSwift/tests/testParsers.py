@@ -37,10 +37,11 @@ class TestParsers(BaseTestCase):
         try:
             from Products.ZenRRD.zencommand import DeviceConfig
             cmd.deviceConfig = DeviceConfig()
-            cmd.deviceConfig.device = 'swift1'
         except ImportError:
-            pass
+            from Products.ZenCollector.services.config import DeviceProxy
+            cmd.deviceConfig = DeviceProxy()
 
+        cmd.deviceConfig.device = 'swift'
         cmd.component = 'swift'
         cmd.command = 'poll_swift_recon -H 127.0.0.1'
         cmd.eventClass = '/Status/Swift'

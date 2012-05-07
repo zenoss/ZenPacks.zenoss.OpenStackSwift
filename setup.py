@@ -5,7 +5,7 @@
 NAME = "ZenPacks.zenoss.OpenStackSwift"
 VERSION = "0.7.0"
 AUTHOR = "Zenoss Labs"
-LICENSE = ""
+LICENSE = "GPLv2"
 NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.zenoss']
 PACKAGES = ['ZenPacks', 'ZenPacks.zenoss', 'ZenPacks.zenoss.OpenStackSwift']
 INSTALL_REQUIRES = []
